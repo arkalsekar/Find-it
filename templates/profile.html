@@ -9,10 +9,11 @@
 {% block body %}
 
 
-<div class="container my-2">
+<div class="container mt-5">
   
+    <h2 class="text-center"> Fill out the User Profile </h2>
+
   {% for data in current_user %}
-    <h2> Fill out the User Profile </h2>
     
     <form action="{% url 'profile' %}" method="POST">
     {% csrf_token %}

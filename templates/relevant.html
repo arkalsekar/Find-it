@@ -8,17 +8,14 @@
 
 {% block body %}
 
-{% comment %}     
-{% for i in relevant_jobs %}
-    {{ i }}
-{% endfor %}
- {% endcomment %}
-
 
 <div class="container mt-5">
-    
+	
+	<h2 class="text-center"> List of Jobs Relevant to your Profile</h2>
+	
+	
     {% for i in relevant_jobs %}
-        <div class="card mt-3">
+        <div class="card mt-5">
             <div class="card-header">
                 {{ i.company_name }}
             </div>
