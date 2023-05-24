@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block relevantActive %}active{% endblock relevantActive %}
+
+{% block title %}
+    Relevant Jobs
+{% endblock title %}
+
+{% block body %}
+
+{% comment %}     
+{% for i in relevant_jobs %}
+    {{ i }}
+{% endfor %}
+ {% endcomment %}
+
+
+<div class="container mt-5">
+    
+    {% for i in relevant_jobs %}
+        <div class="card mt-3">
+            <div class="card-header">
+                {{ i.company_name }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"> {{ i.title }} </h5>
+                <p class="card-text"> {{ i.job_description }} </p>
+                <a href="#" class="btn btn-success"> Apply </a>
+            </div>
+        </div>
+        
+        {% endfor %}
+
+</div>
+
+
+
+
+{% endblock body %}
