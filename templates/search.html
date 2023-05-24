@@ -1,15 +1,32 @@
 {% extends 'base.html' %}
 
 {% block title %}
-
+Search
 {% endblock title %}
 
+{% block searchActive %} active {% endblock searchActive %}
 
 {% block body %}
 <div class="container mt-5">
     
-    {% for i in relevant_jobs %}
-        <div class="card mt-3">
+    <h3 class="text-center"> Search </h3>
+    
+    <form method="get" action="{% url 'search' %}">
+
+    <div class="input-group mb-3">
+
+        <input type="search" class="form-control" id="query" name="query" aria-label="Search" placeholder="Python Django Developer" aria-describedby="submit">
+
+        <div class="input-group-append">
+          <button class="btn btn-success ml-3" type="submit" id="submit">Search</button>
+        </div>
+
+      </div>
+
+    </form>
+      
+    {% for i in relatedJobs %}
+        <div class="card mt-5">
             <div class="card-header">
                 {{ i.company_name }}
             </div>

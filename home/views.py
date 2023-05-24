@@ -20,6 +20,20 @@ def index(request):
     data = {"all_jobs": all_jobs}
     return render(request, 'index.html', context=data)
 
+
+@login_required
+def search(request):
+    query = request.GET['query']
+    
+    if len(query) < 1:
+        query = "Python Developer "
+
+    relatedJobs = Job.objects.filter(title__icontains=query) or Job.objects.filter(company_name__icontains=query) or Job.objects.filter(job_description__icontains=query) or Job.objects.filter(tags__icontains=query)
+    
+    params = {'relatedJobs': relatedJobs}
+    return render(request, 'search.html', params)
+
+
 @login_required
 def relevant(request):
     user_profile = get_object_or_404(Profile, username=request.user)
@@ -29,15 +43,44 @@ def relevant(request):
 
     all_relevant_jobs_id = []
 
-    for i in all_jobs:
-        content_list = [user_profile.techonologies, i.job_description]
-        cv = CountVectorizer()
-        count_matrix = cv.fit_transform(content_list)
-        matrix = cosine_similarity(count_matrix)
-        result = (matrix[1][0]*100).round(2)
-        print(result)
+    if user_profile.techonologies == None or user_profile.interested_jobs == None:
+        data = {'relevant_jobs': [] }
+        return render(request, 'relevant.html', data)
+    
+    elif len(user_profile.techonologies) < 1 or len(user_profile.interested_jobs)  < 1:
+        data = {'relevant_jobs': [] }
+        return render(request, 'relevant.html', data)
 
-        if round(result) > 7:
+    for i in all_jobs:
+        cv = CountVectorizer()
+
+        content_list_1 = [user_profile.techonologies, i.job_description]
+        count_matrix_1 = cv.fit_transform(content_list_1)
+        matrix_1 = cosine_similarity(count_matrix_1)
+        result_1 = (matrix_1[1][0]*100).round(2)
+        
+        content_list_2 = [user_profile.techonologies, i.tags]
+        count_matrix_2 = cv.fit_transform(content_list_2)
+        matrix_2 = cosine_similarity(count_matrix_2)
+        result_2 = (matrix_2[1][0]*100).round(2)
+                
+        content_list_3 = [user_profile.interested_jobs, i.title]
+        count_matrix_3 = cv.fit_transform(content_list_3)
+        matrix_3 = cosine_similarity(count_matrix_3)
+        result_3 = (matrix_3[1][0]*100).round(2)
+        
+        content_list_4 = [user_profile.bio, i.job_description]
+        count_matrix_4 = cv.fit_transform(content_list_4)
+        matrix_4 = cosine_similarity(count_matrix_4)
+        result_4 = (matrix_4[1][0]*100).round(2)
+        
+        content_list_5 = [user_profile.interested_jobs, i.tags]
+        count_matrix_5 = cv.fit_transform(content_list_5)
+        matrix_5 = cosine_similarity(count_matrix_5)
+        result_5 = (matrix_5[1][0]*100).round(2)
+        
+
+        if round(result_1) > 7 or round(result_2) > 7 or round(result_3) > 7 or round(result_4) > 7 or round(result_5) > 7:
             all_relevant_jobs_id.append(i.id)
 
     # print(all_relevant_jobs_id)
@@ -49,20 +92,41 @@ def relevant(request):
 
 @login_required
 def profile(request):
+    current_user = Profile.objects.filter(username=request.user)
+    
+    if len(current_user) != 0:
+        params = {'current_user': current_user}
+        
+        if request.method == "POST":
+            updating_profile = Profile.objects.get(username=request.user)
+            # print(updating_profile.first_name)
 
-    if request.method == "POST":
-        username = request.user
-        first_name = username.first_name
-        last_name = username.last_name
-        jobsinterested = request.POST['jobsinterested']
-        bio = request.POST['bio']
-        technologies = request.POST['technologies']
-        profile = Profile(username=username, first_name=first_name, last_name=last_name, interested_jobs=jobsinterested, bio=bio, techonologies=technologies)
-        profile.save()
-        messages.success(request, "User Profile Saved Successfully")
+            updating_profile.username = request.user
+            updating_profile.first_name = request.POST['fname']
+            updating_profile.last_name = request.POST['lname']
+            updating_profile.interested_jobs = request.POST['jobsinterested']
+            updating_profile.bio = request.POST['bio']
+            updating_profile.techonologies = request.POST['technologies']
+            # profile = Profile(username=username, first_name=first_name, last_name=last_name, interested_jobs=jobsinterested, bio=bio, techonologies=technologies)
+            updating_profile.save()
+            messages.success(request, "User Profile Updated Successfully")
+    
+    else:
+        params = {'current_user': ["", "", "", "", "", ""]}   
+
+        if request.method == "POST":
+            username = request.user
+            first_name = username.first_name
+            last_name = username.last_name
+            jobsinterested = request.POST['jobsinterested']
+            bio = request.POST['bio']
+            technologies = request.POST['technologies']
+            profile = Profile(username=username, first_name=first_name, last_name=last_name, interested_jobs=jobsinterested, bio=bio, techonologies=technologies)
+            profile.save()
+            messages.success(request, "User Profile Saved Successfully")
     
         
-    return render(request, 'profile.html')
+    return render(request, 'profile.html', params)
 
 
 # Create your views here.
@@ -83,7 +147,10 @@ def signup(request):
         create_newuser.first_name = fname
         create_newuser.last_name = lname
         create_newuser.save()
-    
+
+        user_profile = Profile(username=create_newuser, first_name=create_newuser.first_name, last_name=create_newuser.last_name, interested_jobs=" ", bio=" ", techonologies=" ")
+        user_profile.save()
+
         messages.success(request, f'User {uname} created successfully, Go ahead and Login to your Account')
 
     return redirect('/')

@@ -10,41 +10,41 @@
 
 
 <div class="container my-2">
+  
+  {% for data in current_user %}
     <h2> Fill out the User Profile </h2>
     
     <form action="{% url 'profile' %}" method="POST">
     {% csrf_token %}
-    
-    
-   
 
     <div class="mb-3">
         <label for="fname" class="form-label my-2">First Name</label>
-      <input type="text" class="form-control" name="fname" id="fname" placeholder="Abdul Rehman">
+      <input type="text" class="form-control" name="fname" id="fname" value="{{data.first_name}}">
     </div>
     
     <div class="mb-3">
         <label for="lname" class="form-label my-2">Last Name</label>
-        <input type="text" class="form-control" id="lname" name="lname" placeholder="Kalsekar">
+        <input type="text" class="form-control" id="lname" name="lname" value="{{ data.last_name }}">
     </div>
     
     <div class="mb-3">
       <label for="jobsinterested" class="form-label my-2">Jobs Interested</label>
-      <input type="text" class="form-control" id="jobsinterested" name="jobsinterested" placeholder="Regarding an Offer">
+      <input type="text" class="form-control" id="jobsinterested" name="jobsinterested" value="{{ data.interested_jobs }}">
     </div>
     
     <div class="mb-3">
       <label for="technologies" class="form-label my-2">Technologies Worked On</label>
-      <input type="text" class="form-control" id="technologies" name="technologies" placeholder="Regarding an Offer">
+      <input type="text" class="form-control" id="technologies" name="technologies" value="{{ data.techonologies }}">
     </div>
     
     <div class="mb-3">
         <label for="bio" class="form-label my-2">Bio </label>
-        <textarea class="form-control" id="bio" placeholder="Enter your Description here... " name="bio" rows="3"></textarea>
+        <textarea class="form-control" id="bio" placeholder="Enter your Description here... " name="bio" rows="3">{{ data.bio }}</textarea>
     </div>
     
     <button type="submit" class="btn btn-success"> Submit </button>
     </form>
+  {% endfor %}
     
     </div>
 
