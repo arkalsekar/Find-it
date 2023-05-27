@@ -3,40 +3,34 @@
 A Complete Job Search / Job Recommendation systems created  using Django, SQL Database, Scikit-Learn.
 
 ## Demo 
+
 Sign Up page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/6.PNG)
-<br>
 
 Login Page
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/7.PNG)
-<br>
 
 Home page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/1.PNG)
-<br>
 
 Profile Page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/2.PNG)
-<br>
 
 Relevant Jobs Page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/3.PNG)
-<br> 
 
 Search Jobs Page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/4.PNG)
-<br> 
 
 Search Based on Tags Page 
-<hr>
+
 ![Demo](https://raw.githubusercontent.com/arkalsekar/Find-it/main/demo/5.PNG)
-<br> 
 
 
 ## Characteristics
